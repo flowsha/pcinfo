@@ -115,6 +115,7 @@ func main() {
 		}
 		fmt.Println("所属部门：", department)
 		fmt.Println("使用人：", username)
+		fmt.Print("\n\n开始获取电脑系统配置...\n\n")
 
 		// get Win32_ComputerSystem information
 		var computer []Win32_ComputerSystem
@@ -228,7 +229,7 @@ func main() {
 		fmt.Println("MAC SHA1 Hash:", SHA1(pc.NetworkAdapter[0].MACAddress))
 		//db, err := sql.Open("mysql", "root:@/test?charset=utf8")
 
-		fmt.Println("\n\n已经成功获取电脑配置信息，并录入数据库！")
+		fmt.Print("\n\n已经成功获取电脑配置信息，并录入数据库！\n\n")
 		fmt.Print("请按任意键退出...")
 		fmt.Scanln()
 		return
