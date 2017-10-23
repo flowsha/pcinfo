@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	//"time"
 	//"database/sql"
 	"github.com/StackExchange/wmi"
 	_ "github.com/go-sql-driver/mysql"
@@ -18,7 +19,10 @@ import (
 )
 
 type Win32_BIOS struct {
-	InstallDate string
+	Name          string
+	Manufacturer  string
+	SerialNumber  string
+	ReleaseDate   string
 }
 
 type Win32_ComputerSystem struct {
@@ -64,6 +68,10 @@ type Win32_DesktopMonitor struct {
 	Name        string
 }
 
+type Win32_Printer struct {
+	Name string
+}
+
 type PCInfo struct {
 	ComputerName           string
 	ComputerManufacturer   string
@@ -79,6 +87,11 @@ type PCInfo struct {
 	DiskDrive              []Win32_DiskDrive
 	MonitorName            string
 	MonitorType            string
+	PrinterName            string
+	BIOSName               string
+	BIOSManufacturer       string
+	BIOSReleaseDate        string
+	BIOSSerialNumber       string
 }
 
 func SHA1(data string) string {
@@ -115,7 +128,7 @@ func main() {
 		}
 		fmt.Println("所属部门：", department)
 		fmt.Println("使用人：", username)
-		fmt.Print("\n\n开始获取电脑系统配置...\n\n")
+		fmt.Print("\n开始获取电脑系统配置...\n\n")
 
 		// get Win32_ComputerSystem information
 		var computer []Win32_ComputerSystem
@@ -144,6 +157,24 @@ func main() {
 			fmt.Println("物理内存：", pc.TotalPhysicalMemory)
 			fmt.Println("系统架构：", pc.SystemType)
 			fmt.Println("设备类型：", pc.PCSystemType)
+		}
+
+		// get Win32_BIOS information
+		var bios []Win32_BIOS
+		q = wmi.CreateQuery(&bios, "WHERE PrimaryBIOS=TRUE")
+		err = wmi.Query(q, &bios)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, v := range bios {
+			pc.BIOSName = strings.TrimSpace(v.Name)
+			pc.BIOSManufacturer = strings.TrimSpace(v.Manufacturer)
+			pc.BIOSSerialNumber = strings.TrimSpace(v.SerialNumber)
+			pc.BIOSReleaseDate = string([]rune(strings.TrimSpace(v.ReleaseDate))[0:8])
+			fmt.Println("BIOS名称：", pc.BIOSName)
+			fmt.Println("BIOS生产商：", pc.BIOSManufacturer)
+			fmt.Println("BIOS序列号：", pc.BIOSSerialNumber)
+			fmt.Println("BIOS出厂日期：", pc.BIOSReleaseDate)
 		}
 
 		// get Win32_Processor information
@@ -226,13 +257,24 @@ func main() {
 			fmt.Printf("显示器类型[%d]：%s\n", i+1, pc.MonitorType)
 		}
 
+		// get Win32_Printer information
+		var printer []Win32_Printer
+		q = wmi.CreateQuery(&printer, "WHERE Default=TRUE")
+		err = wmi.Query(q, &printer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for i, v := range printer {
+			pc.PrinterName = strings.TrimSpace(v.Name)
+			fmt.Printf("打印机名称[%d]：%s\n", i+1, pc.PrinterName)
+		}
+
 		fmt.Println("MAC SHA1 Hash:", SHA1(pc.NetworkAdapter[0].MACAddress))
 		//db, err := sql.Open("mysql", "root:@/test?charset=utf8")
 
-		fmt.Print("\n\n已经成功获取电脑配置信息，并录入数据库！\n\n")
+		fmt.Print("\n已经成功获取电脑配置信息，并录入数据库！\n\n")
 		fmt.Print("请按任意键退出...")
 		fmt.Scanln()
 		return
 	}
-
 }
