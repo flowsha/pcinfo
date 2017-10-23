@@ -1,59 +1,59 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : xtcdma
-Source Server Version : 50075
-Source Host           : 134.162.72.226:3306
+Source Server         : liusha
+Source Server Version : 50527
+Source Host           : localhost:3306
 Source Database       : zhwh
 
 Target Server Type    : MYSQL
-Target Server Version : 50075
+Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2017-10-23 15:55:43
+Date: 2017-10-23 18:51:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
 -- ----------------------------
 -- Table structure for `tb_pcinfo`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_pcinfo`;
 CREATE TABLE `tb_pcinfo` (
   `ID` varchar(40) NOT NULL,
-  `V_SN_SHA` varchar(40) default NULL,
-  `V_DEPARTMENT` varchar(50) default NULL,
-  `V_USERNAME` varchar(20) default NULL,
-  `V_COMPUTER_NAME` varchar(50) default NULL,
-  `V_COMPUTER_MANUFACTURER` varchar(50) default NULL,
-  `V_COMPUTER_MODEL` varchar(50) default NULL,
-  `V_COMPUTER_ARCH` varchar(50) default NULL,
-  `V_COMPUTER_TYPE` varchar(10) default NULL,
-  `V_CPU_MODEL` varchar(50) default NULL,
-  `V_CPU_MANUFACTURER` varchar(50) default NULL,
-  `V_CPU_CORES` int(6) default NULL,
-  `V_MEMORY_CAPACITY` int(4) default NULL,
-  `V_MEMORY_NUM` smallint(6) default NULL,
-  `V_NETWORK1_MAC` varchar(17) default NULL,
-  `V_NETWORK1_IPV4` varchar(15) default NULL,
-  `V_NETWORK1_IPV6` varchar(29) default NULL,
-  `V_NETWORK2_MAC` varchar(17) default NULL,
-  `V_NETWORK2_IPV4` varchar(15) default NULL,
-  `V_NETWORK2_IPV6` varchar(29) default NULL,
-  `V_DISK_MODEL` varchar(50) default NULL,
-  `V_DISK_SN` varchar(50) default NULL,
-  `V_DISK_CAPACITY` varchar(10) default NULL,
-  `V_DISK_INTERFACE` varchar(10) default NULL,
-  `V_MONITOR_NAME` varchar(50) default NULL,
-  `V_MONITOR_TYPE` varchar(50) default NULL,
-  `V_PRINTER_NAME` varchar(50) default NULL,
-  `V_BIOS_NAME` varchar(50) default NULL,
-  `V_BIOS_MANUFACTURER` varchar(50) default NULL,
-  `V_BIOS_SN` varchar(50) default NULL,
-  `D_BIOS_RELEASE_DATE` date default NULL,
-  `D_INSERT_TIME` datetime default NULL,
-  `D_UPDATE_TIME` datetime default NULL,
-  PRIMARY KEY  (`ID`)
+  `V_SN_SHA` varchar(40) DEFAULT NULL,
+  `V_CORP_NAME` varchar(50) DEFAULT NULL,
+  `V_DEPARTMENT` varchar(50) DEFAULT NULL,
+  `V_USERNAME` varchar(20) DEFAULT NULL,
+  `V_COMPUTER_NAME` varchar(50) DEFAULT NULL,
+  `V_COMPUTER_MANUFACTURER` varchar(50) DEFAULT NULL,
+  `V_COMPUTER_MODEL` varchar(50) DEFAULT NULL,
+  `V_COMPUTER_ARCH` varchar(50) DEFAULT NULL,
+  `V_COMPUTER_TYPE` varchar(10) DEFAULT NULL,
+  `V_CPU_MODEL` varchar(50) DEFAULT NULL,
+  `V_CPU_MANUFACTURER` varchar(50) DEFAULT NULL,
+  `V_CPU_CORES` int(6) DEFAULT NULL,
+  `V_MEMORY_CAPACITY` int(4) DEFAULT NULL,
+  `V_MEMORY_NUM` smallint(6) DEFAULT NULL,
+  `V_NETWORK1_MAC` varchar(17) DEFAULT NULL,
+  `V_NETWORK1_IPV4` varchar(15) DEFAULT NULL,
+  `V_NETWORK1_IPV6` varchar(29) DEFAULT NULL,
+  `V_NETWORK2_MAC` varchar(17) DEFAULT NULL,
+  `V_NETWORK2_IPV4` varchar(15) DEFAULT NULL,
+  `V_NETWORK2_IPV6` varchar(29) DEFAULT NULL,
+  `V_DISK_MODEL` varchar(50) DEFAULT NULL,
+  `V_DISK_SN` varchar(50) DEFAULT NULL,
+  `V_DISK_CAPACITY` varchar(10) DEFAULT NULL,
+  `V_DISK_INTERFACE` varchar(10) DEFAULT NULL,
+  `V_MONITOR_NAME` varchar(50) DEFAULT NULL,
+  `V_MONITOR_TYPE` varchar(50) DEFAULT NULL,
+  `V_PRINTER_NAME` varchar(50) DEFAULT NULL,
+  `V_BIOS_NAME` varchar(50) DEFAULT NULL,
+  `V_BIOS_MANUFACTURER` varchar(50) DEFAULT NULL,
+  `V_BIOS_SN` varchar(50) DEFAULT NULL,
+  `D_BIOS_RELEASE_DATE` date DEFAULT NULL,
+  `D_INSERT_TIME` datetime DEFAULT NULL,
+  `D_UPDATE_TIME` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
