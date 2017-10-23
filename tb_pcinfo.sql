@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2017-10-23 18:51:10
+Date: 2017-10-23 23:15:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `tb_pcinfo`;
 CREATE TABLE `tb_pcinfo` (
   `ID` varchar(40) NOT NULL,
-  `V_SN_SHA` varchar(40) DEFAULT NULL,
+  `V_SN_SHA1` varchar(40) DEFAULT NULL,
   `V_CORP_NAME` varchar(50) DEFAULT NULL,
   `V_DEPARTMENT` varchar(50) DEFAULT NULL,
   `V_USERNAME` varchar(20) DEFAULT NULL,
