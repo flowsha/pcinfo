@@ -316,20 +316,24 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//var sn string
-	row := db.QueryRow("SELECT V_SN_SHA1 FROM tb_pcinfo WHERE V_SN_SHA1 = ?", pc.GetPCSnSHA1())
+	rows, err := db.Query("SELECT V_SN_SHA1 FROM tb_pcinfo WHERE V_SN_SHA1 = ?", pc.GetPCSnSHA1())
 
-    if row != nil {
-    	println(row)
+    if rows.Next() {
+    	println(rows)
 	}
 
 	if err != nil {
-		println("sdfsd")
 		log.Fatal(err)
 	}
 	db.Close()
-
 
 	fmt.Print("\n已经成功获取电脑配置信息，并录入数据库！\n\n")
 	fmt.Print("请按任意键退出...")
