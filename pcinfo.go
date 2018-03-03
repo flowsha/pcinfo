@@ -18,14 +18,16 @@ import (
 	"log"
 )
 
-type Win32_BIOS struct {
+// Win32BIOS struct defined. 
+type Win32BIOS struct {
 	Name         string
 	Manufacturer string
 	SerialNumber string
 	ReleaseDate  string
 }
 
-type Win32_ComputerSystem struct {
+// Win32ComputerSystem struct defined.
+type Win32ComputerSystem struct {
 	Name                string
 	Manufacturer        string
 	Model               string
@@ -34,26 +36,30 @@ type Win32_ComputerSystem struct {
 	TotalPhysicalMemory uint64
 }
 
-type Win32_Processor struct {
+// Win32Processor struct defined.
+type Win32Processor struct {
 	Name          string
 	Manufacturer  string
 	SerialNumber  string
 	NumberOfCores uint32
 }
 
-type Win32_PhysicalMemory struct {
+// Win32PhysicalMemory struct defined.
+type Win32PhysicalMemory struct {
 	Name         string
 	Manufacturer string
 	Speed        uint32
 	Capacity     uint64
 }
 
-type Win32_NetworkAdapterConfiguration struct {
+// Win32NetworkAdapterConfiguration struct defined.
+type Win32NetworkAdapterConfiguration struct {
 	MACAddress string
 	IPAddress  []string
 }
 
-type Win32_DiskDrive struct {
+// Win32DiskDrive struct defined.
+type Win32DiskDrive struct {
 	Name          string
 	Manufacturer  string
 	Model         string
@@ -62,16 +68,19 @@ type Win32_DiskDrive struct {
 	InterfaceType string
 }
 
-type Win32_DesktopMonitor struct {
+// Win32DesktopMonitor struct defined.
+type Win32DesktopMonitor struct {
 	//MonitorManufacturer string
 	MonitorType string
 	Name        string
 }
 
-type Win32_Printer struct {
+// Win32Printer struct defined.
+type Win32Printer struct {
 	Name string
 }
 
+// PCInfo struct defined.
 type PCInfo struct {
 	ID                     string
 	CorpName               string
@@ -87,8 +96,8 @@ type PCInfo struct {
 	ProcessorName          string
 	ProcessorManufacturer  string
 	ProcessorNumberOfCores uint32
-	NetworkAdapter         []Win32_NetworkAdapterConfiguration
-	DiskDrive              []Win32_DiskDrive
+	NetworkAdapter         []Win32NetworkAdapterConfiguration
+	DiskDrive              []Win32DiskDrive
 	MonitorName            string
 	MonitorType            string
 	PrinterName            string
@@ -98,18 +107,21 @@ type PCInfo struct {
 	BIOSSerialNumber       string
 }
 
+// PCInfoInterface interface defined.
 type PCInfoInterface interface {
 	init()
 	GetPCInfo()
 	GetPCSnSHA1()
 }
 
+// GetPCSnSHA1 function belongs to PCInfo.
 func (pc *PCInfo) GetPCSnSHA1() string {
 	t := sha1.New()
 	io.WriteString(t, pc.BIOSSerialNumber)
 	return fmt.Sprintf("%x", t.Sum(nil))
 }
 
+// init function belongs to PCInfo.
 func (pc *PCInfo) init() {
 
 	for {
@@ -117,11 +129,11 @@ func (pc *PCInfo) init() {
 		fmt.Print("请输入所属公司[50字符]：")
 		fmt.Scanln(&pc.CorpName)
 		pc.CorpName = strings.TrimSpace(pc.CorpName)
-		str_length := len([]rune(pc.CorpName))
-		if str_length > 50 {
+		strLength := len([]rune(pc.CorpName))
+		if strLength > 50 {
 			fmt.Println("所属公司超过50个字符！")
 			continue
-		} else if str_length == 0 {
+		} else if strLength == 0 {
 			fmt.Println("所属公司不能为空！")
 			continue
 		}
@@ -130,11 +142,11 @@ func (pc *PCInfo) init() {
 		fmt.Print("请输入所属部门[50字符]：")
 		fmt.Scanln(&pc.Department)
 		pc.Department = strings.TrimSpace(pc.Department)
-		str_length = len([]rune(pc.Department))
-		if str_length > 50 {
+		strLength = len([]rune(pc.Department))
+		if strLength > 50 {
 			fmt.Println("所属部门超过50个字符！")
 			continue
-		} else if str_length == 0 {
+		} else if strLength == 0 {
 			fmt.Println("所属部门不能为空！")
 			continue
 		}
@@ -143,11 +155,11 @@ func (pc *PCInfo) init() {
 		fmt.Print("请输入使用人姓名[20字符]：")
 		fmt.Scanln(&pc.UserName)
 		pc.UserName = strings.TrimSpace(pc.UserName)
-		str_length = len([]rune(pc.UserName))
-		if len([]rune(pc.UserName)) > 20 {
+		strLength = len([]rune(pc.UserName))
+		if strLength > 20 {
 			fmt.Println("使用人姓名超过20个字符！")
 			continue
-		} else if str_length == 0 {
+		} else if strLength == 0 {
 			fmt.Println("使用人姓名不能为空！")
 			continue
 		}
@@ -166,11 +178,13 @@ func (pc *PCInfo) init() {
 	}
 }
 
+// GetPCInfo function belongs to PCInfo.
 func (pc *PCInfo) GetPCInfo() {
 	fmt.Print("\n开始获取电脑系统配置...\n\n")
 	// get Win32_ComputerSystem information
-	var computer []Win32_ComputerSystem
-	q := wmi.CreateQuery(&computer, "")
+	var computer []Win32ComputerSystem
+	//q := wmi.CreateQuery(&computer, "")
+	q := "SELECT * FROM Win32_ComputerSystem"
 	err := wmi.Query(q, &computer)
 	if err != nil {
 		log.Fatal(err)
@@ -198,8 +212,9 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_BIOS information
-	var bios []Win32_BIOS
-	q = wmi.CreateQuery(&bios, "WHERE PrimaryBIOS=TRUE")
+	var bios []Win32BIOS
+	//q = wmi.CreateQuery(&bios, "WHERE PrimaryBIOS=TRUE")
+	q = "SELECT * FROM Win32_BIOS WHERE PrimaryBIOS=TRUE"
 	err = wmi.Query(q, &bios)
 	if err != nil {
 		log.Fatal(err)
@@ -216,8 +231,9 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_Processor information
-	var processor []Win32_Processor
-	q = wmi.CreateQuery(&processor, "")
+	var processor []Win32Processor
+	//q = wmi.CreateQuery(&processor, "")
+	q = "SELECT * FROM Win32_Processor"
 	err = wmi.Query(q, &processor)
 	if err != nil {
 		log.Fatal(err)
@@ -232,22 +248,24 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_PhysicalMemory information
-	var memory []Win32_PhysicalMemory
-	q = wmi.CreateQuery(&memory, "")
+	var memory []Win32PhysicalMemory
+	//q = wmi.CreateQuery(&memory, "")
+	q = "SELECT * FROM Win32_PhysicalMemory"
 	err = wmi.Query(q, &memory)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for i, v := range memory {
-		pc.NumberOfPhysicalMemory += 1
+		pc.NumberOfPhysicalMemory++
 		fmt.Printf("内存频率[%d]：%s\n", i+1, strconv.FormatUint(uint64(v.Speed), 10)+"MHz")
 		fmt.Printf("内存容量[%d]：%s\n", i+1, strconv.FormatUint(v.Capacity/1000000000, 10)+"G")
 	}
 	fmt.Println("内存数量：", pc.NumberOfPhysicalMemory)
 
 	// get Win32_NetworkAdapterConfiguration information
-	var network []Win32_NetworkAdapterConfiguration
-	q = wmi.CreateQuery(&network, "WHERE IPEnabled=TRUE")
+	var network []Win32NetworkAdapterConfiguration
+	//q = wmi.CreateQuery(&network, "WHERE IPEnabled=TRUE")
+	q = "SELECT * FROM Win32_NetworkAdapterConfiguration WHERE IPEnabled=TRUE"
 	err = wmi.Query(q, &network)
 	if err != nil {
 		log.Fatal(err)
@@ -261,8 +279,9 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_DiskDrive information
-	var disk []Win32_DiskDrive
-	q = wmi.CreateQuery(&disk, "")
+	var disk []Win32DiskDrive
+	//q = wmi.CreateQuery(&disk, "")
+	q = "SELECT * FROM Win32_DiskDrive"
 	err = wmi.Query(q, &disk)
 	if err != nil {
 		log.Fatal(err)
@@ -276,8 +295,9 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_DesktopMonitor information
-	var monitor []Win32_DesktopMonitor
-	q = wmi.CreateQuery(&monitor, "")
+	var monitor []Win32DesktopMonitor
+	//q = wmi.CreateQuery(&monitor, "")
+	q = "SELECT * FROM Win32_DesktopMonitor"
 	err = wmi.Query(q, &monitor)
 	if err != nil {
 		log.Fatal(err)
@@ -290,8 +310,9 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 
 	// get Win32_Printer information
-	var printer []Win32_Printer
-	q = wmi.CreateQuery(&printer, "WHERE Default=TRUE AND Local=TRUE AND Network=FALSE")
+	var printer []Win32Printer
+	//q = wmi.CreateQuery(&printer, "WHERE Default=TRUE AND Local=TRUE AND Network=FALSE")
+	q = "SELECT * FROM Win32_Printer WHERE Default=TRUE AND Local=TRUE AND Network=FALSE"
 	err = wmi.Query(q, &printer)
 	if err != nil {
 		log.Fatal(err)
@@ -302,7 +323,7 @@ func (pc *PCInfo) GetPCInfo() {
 	}
 }
 
-
+// The entry of main program.
 func main() {
 
 	var pc PCInfo
